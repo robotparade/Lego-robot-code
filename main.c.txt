@@ -1,0 +1,157 @@
+﻿#include <kipr/botball.h>
+
+
+int main()
+{
+    /* 
+       motor 0: right wheel
+       motor 1: upper wheel
+       motor 2: left wheel
+       motor 3: conveyor belt
+       
+       servo 1: grabs cup
+       servo 2: grabby poms
+    */
+
+
+    printf("alright kiddos. its time.");
+    
+    //servos in start position
+    enable_servos();
+    set_servo_position(1, 1377);
+    set_servo_position(3, 1900);
+    printf("servos set");
+
+
+    //wait for light
+    //wait_for_light(0);
+    printf("lift off");
+    
+    //robot shuts off in two minutes
+    shut_down_in(120);
+    printf("timer set");
+        
+    //turns left
+    motor(0, 25);
+    motor(2, 25);
+    msleep(900);
+    motor(2, 15);
+    motor(0, 50);
+    msleep(2000);
+    
+    //servo moves up
+    set_servo_position(1, 600);
+    
+    //goes forward
+    motor(0, 40);
+    motor(2, 40);
+    msleep(500);
+    
+    //turns right, next to cup
+    motor(0, 15);
+    motor(2, 30);
+    msleep(3000);
+    
+    //goes forward to grab cup
+    motor(0, 30);
+    motor(2, 30);
+    msleep(1000);
+    
+    //grabs cup
+    enable_servos();
+    set_servo_position(1, 634);
+    msleep(100);
+    set_servo_position(1, 877);
+    msleep(100);
+    set_servo_position(1, 1307);
+    msleep(100);
+    set_servo_position(1, 1495);
+    msleep(100);
+    set_servo_position(1, 1720);
+    printf("consider him grabbified");
+    
+    //straightens self out
+    motor(0, 15);
+    motor(2, 49);
+    msleep(1000);
+    
+    //goes forward until it finds the line
+    motor(0, 37);
+    motor(2, 30);
+    
+    while(analog(0) < 3000)
+    {
+        if(analog(0) > 3000)
+        {
+            ao();
+            printf("line has been seen");
+            break;
+        }
+    }
+    
+    //goes forward a bit
+    motor(0, 57);
+    motor(2, 50);
+    msleep(700);
+    
+    //turns left
+    motor(0, 45);
+    motor(2, 0);
+    msleep(2600);
+    
+    //goes forward until it hits the line. 
+    motor(0, 57);
+    motor(2, 50);
+    while(analog(0) < 3000)
+    {
+        if(analog(0) > 3000)
+        {
+            ao();
+            printf("i seen't it");
+            break;
+        }
+    }
+    motor(0, 50);
+    motor(2, 50);
+    msleep(800);
+    
+    //opens grabby poms
+    set_servo_position(2, 1148);
+    
+    //turns right
+    motor(0, 0);
+    motor(2, 50);
+    msleep(2500);
+    
+    //goes forward slightly
+    motor(0, 30);
+    motor(2, 30);
+    msleep(800);
+    
+    //turns right
+    motor(0, 0);
+    motor(2, 50);
+    msleep(2600);
+    
+    //moves forward
+    motor(0, 30);
+    motor(2, 30);
+    msleep(700);
+    ao();
+    
+    //scoops poms into conveyor belt
+    set_servo_position(2, 1875);
+    printf("first batch o poms down the hatch");
+    
+    //runs conveyor belt
+    motor(1, 40);
+    motor(3, 40);
+    motor(0, 10);
+    motor(2, 10);
+    msleep(20000);
+    
+    
+    ao();
+    printf("our work here is done :)");
+    return 0;
+}
